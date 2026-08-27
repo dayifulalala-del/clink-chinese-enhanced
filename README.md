@@ -1,13 +1,17 @@
+# Clink Chinese Enhanced v0.2
+
+> v0.2 uses the language code `zh_cn` instead of `zh` to avoid being hidden by Clink's official Chinese (`zh`) pack. This is an A/B test for community-pack discovery.
+
 # Clink Chinese Enhanced v0.1（实验版）
 
 这是针对 Clink 中文拼音现有“整串 reading → 候选”机制制作的实验增强包。目标不是假装实现真正的拼音解码器，而是在 **不修改 Clink App 本体** 的前提下，先补齐常用单字、常用词、长拼音短句和基础下一词预测。
 
 ## 这版具体做了什么
 
-- `zh.cime`：14,216 个拼音 reading，包含 GB2312 常用汉字、常用词和常见组合短句。
-- `zh.clex`：7,388 个词典条目，用于词典/补全基础能力。
-- `zh.cngm`：704 个下一词关系，从分词后的中文模板语料构建。
-- `zh.emoji.json`：基础中文 Emoji 关键词。
+- `zh_cn.cime`：14,216 个拼音 reading，包含 GB2312 常用汉字、常用词和常见组合短句。
+- `zh_cn.clex`：7,388 个词典条目，用于词典/补全基础能力。
+- `zh_cn.cngm`：704 个下一词关系，从分词后的中文模板语料构建。
+- `zh_cn.emoji.json`：基础中文 Emoji 关键词。
 - **没有神经网络模型**：v0.1 先验证 IME 和联想链路，避免把问题混在一起。
 
 ## 必测用例
@@ -50,10 +54,10 @@ Clink 当前 `.cime` 本质仍是 reading→候选表。这个包用高频词和
 
 ## 文件说明
 
-- `Lexicons/zh.cime`：可读文本 IME 表。
-- `Lexicons/zh.clex`：Clink CLEX v1 二进制词典。
-- `Lexicons/zh.cngm`：Clink CNGM v1 下一词模型。
-- `Lexicons/zh.emoji.json`：中文 Emoji aliases。
+- `Lexicons/zh_cn.cime`：可读文本 IME 表。
+- `Lexicons/zh_cn.clex`：Clink CLEX v1 二进制词典。
+- `Lexicons/zh_cn.cngm`：Clink CNGM v1 下一词模型。
+- `Lexicons/zh_cn.emoji.json`：中文 Emoji aliases。
 - `source/zh-ime.tsv`：可编辑 IME 源表。
 - `source/zh.txt`：词典源词表。
 - `source/zh.sentences.txt`：下一词模型的分词语料。

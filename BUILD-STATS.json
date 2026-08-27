@@ -6,5 +6,8 @@
   "ime_readings": 14216,
   "clex_entries": 7388,
   "cngm_pairs": 704,
-  "sentence_lines": 20478
+  "sentence_lines": 20478,
+  "languageCode": "zh_cn",
+  "version": "v0.2.0",
+  "purpose": "Avoid collision with official zh package and test Clink community pack discovery."
 }
