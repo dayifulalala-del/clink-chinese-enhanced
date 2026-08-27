@@ -1,0 +1,8 @@
+nihao	你好
+nihaoma	你好吗
+pinyin	拼音
+woxiangchifan	我想吃饭
+jintianwoxiangchifan	今天我想吃饭
+zhongwenshurufa	中文输入法
+zidongjiucuo	自动纠错
+zhongwenyuyanbao	中文语言包

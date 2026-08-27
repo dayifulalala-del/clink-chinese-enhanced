@@ -1,0 +1,30 @@
+name: Publish Clink Chinese Enhanced
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release version, e.g. v0.1.0
+        required: true
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate pack
+        run: python3 tools/validate-pack.py zh
+      - name: Build release manifest
+        run: |
+          V="${{ inputs.version || github.ref_name }}"
+          rm -rf out && mkdir out
+          python3 tools/build-release-manifest.py "$V" "${{ github.repository }}" out
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ inputs.version || github.ref_name }}"
+          gh release view "$V" >/dev/null 2>&1 || gh release create "$V" --title "$V" --generate-notes
+          find out -type f -print0 | while IFS= read -r -d '' f; do gh release upload "$V" "$f" --clobber; done

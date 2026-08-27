@@ -1,0 +1,6 @@
+Clink Chinese Enhanced v0.1
+
+Project-authored vocabulary, phrase templates, source lists and generated Clink assets in this archive are released under CC0-1.0.
+Build scripts adapted from anti-ltd/clink-language-packs are provided for interoperability; consult the upstream repository for its current terms.
+ICU uconv was used as a build-time transliterator only; ICU data/code is not bundled in this archive.
+No proprietary commercial input-method dictionary is bundled.
