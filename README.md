@@ -1,68 +1,82 @@
-# Clink Chinese Enhanced v0.3（社区实验版）
+# Clink Chinese Enhanced v0.4
 
-Clink Chinese Enhanced language code: `zh_cn`
+语言代码：`zh_cn`（避开官方 `zh` 包冲突）
 
-这是一个社区实验性中文增强包，用于验证 Clink 中文拼音输入的候选、长拼音短句和基础联想能力。仓库只发布 `zh_cn` 这一套语言包；旧的 `zh` 文件已移除，以避免与 Clink 官方中文包冲突。
+这是给 [Clink](https://clinkkeys.app/) 用的社区中文拼音包。  
+词频、读音和候选排序来自 [万象拼音](https://github.com/amzxyz/rime-wanxiang)（CC BY 4.0），再按 Clink 的能力裁剪。
 
-这是针对 Clink 中文拼音现有“整串 reading → 候选”机制制作的实验增强包。目标不是假装实现真正的拼音解码器，而是在 **不修改 Clink App 本体** 的前提下，先补齐常用单字、常用词、长拼音短句和基础下一词预测。
+> 万象好用，是因为 Rime 会动态切分音节、整句解码，再叠加语法模型。  
+> Clink 的 `.cime` **不会**做这些事：它只做「整串拼音 → 最多 16 个候选」。  
+> 所以这个包能做的，是把万象里真正高频的字词，按权重排进这张静态表，而不是假装自己是 Rime。
 
-## 这版具体做了什么
+## 和 v0.3 / 官方 `zh` 的差别
 
-- `zh_cn.cime`：14,216 个拼音 reading，包含 GB2312 常用汉字、常用词和常见组合短句。
-- `zh_cn.clex`：7,388 个词典条目，用于词典/补全基础能力。
-- `zh_cn.cngm`：704 个下一词关系，从分词后的中文模板语料构建。
-- `zh_cn.emoji.json`：基础中文 Emoji 关键词。
-- **没有神经网络模型**：本版本先验证 IME 和联想链路，避免把问题混在一起。
+| | v0.3 实验包 | 官方 `zh` | 本包 v0.4 |
+|---|---|---|---|
+| 数据来源 | GB2312 + 模板长句笛卡尔积 | Clink 自带表 | 万象字表 + 高频基础词 |
+| IME 条数 | 14,216，其中 1.2 万是「晚上我们能坐火车」这种整句 | 约 2.8 万 | 约 6.7 万（字、词、地名、人名、少量简拼） |
+| 候选排序 | 基本按字表顺序，`wo` 第二候选是「倭」 | 一般，但覆盖偏旧 | 按万象词频，`wo`/`ni`/`shi`/`de` 常用字在前 |
+| 日常词 | 缺「什么」「怎么」 | 有，但现代网络词偏少 | 有微信、支付宝、外卖、验证码等 |
+| 长句 | 靠穷举模板 | 几乎没有 | 只保留真的会整串输入的短句 |
+| 联想 | 115 个词拼出来的 2 万模板句 | 有下一词模型 | 3,090 条更自然的下一词对 |
+| Emoji | 24 个 | 约 1900 | 沿用官方中文 Emoji 表并合并本包补充 |
 
-## 必测用例
+v0.3 不好用的根因不是「词太少」，而是：
 
-| 拼音 | 预期候选 |
+1. **12,228 条 reading 长度 ≥ 16**，全是模板句。日常输入是 `jin` → `jintian` → 再打下一个词，不会把「等会儿我们想要看电影」一次打完。
+2. **词典 7388 条里 6763 条是生僵单字**，2 字词只有 350 个。
+3. Clink 不会切分拼音。词库再堆长句，只要你少打一个字母就匹配不上。
+
+## 这个包实际覆盖什么
+
+- 万象单字表：按音节取词频最高的 16 个字
+- 万象基础词库：权重 ≥ 1500 的 2–4 字词
+- 多音、错音、地名、人名、艺人（按权重截断）
+- 高频词简拼：`nh` 你好、`zg`/`zhg` 中国、`bj` 北京、`wx` 微信
+- `v` = `ü`：`nv` 女、`lv` 绿
+- 常用口语短句：你好吗、对不起、我想吃饭、中文输入法
+
+## 必测
+
+| 拼音 | 预期首选 |
 |---|---|
 | `nihao` | 你好 |
 | `nihaoma` | 你好吗 |
-| `pinyin` | 拼音 |
+| `shenme` | 什么 |
+| `zenme` | 怎么 |
+| `zenmeyang` | 怎么样 |
+| `wo` | 我 |
+| `shi` | 是 |
+| `de` | 的 |
+| `yi` | 一 |
+| `nv` | 女 |
+| `lv` | 绿 |
+| `zhongguo` | 中国 |
+| `zg` / `zhg` | 中国 |
+| `bj` | 北京 |
+| `wx` | 微信 |
 | `woxiangchifan` | 我想吃饭 |
-| `jintianwoxiangchifan` | 今天我想吃饭 |
+| `pinyin` | 拼音 |
 | `zhongwenshurufa` | 中文输入法 |
-| `zidongjiucuo` | 自动纠错 |
-| `zhongwenyuyanbao` | 中文语言包 |
 
-如果 `nihaoma` / `pinyin` 在本包下仍然完全无法形成候选，那么问题基本可以判定在 **Clink App 的中文 IME composition/decoder**，不是语言包数据不足。
+打词请按词来：`jintian` 出「今天」，再打 `tianqi` 出「天气」。不要指望整串解码——Clink 现在没有这个解码器。
 
-## 安装到 Clink 的方式
+## 安装
 
-Clink 社区语言包通过 GitHub Release 仓库安装。
+1. Clink → **General → Repositories**，添加：
 
-1. 在 GitHub 新建一个公开仓库，例如 `clink-chinese-enhanced`。
-2. 把这个 ZIP 解压后的**全部内容**上传到仓库根目录。
-3. GitHub → Actions → `Publish Clink Chinese Enhanced` → Run workflow，版本填 `v0.3.0`。
-4. Workflow 成功后会创建 Release，并上传 `manifest.json` 与四个 `zh_cn--zh_cn.*` 语言包资产。
-5. Clink → General → Repositories → 添加 `你的GitHub用户名/clink-chinese-enhanced`。
-6. 回到 Languages / Community，安装该仓库提供的中文包。
+   ```text
+   dayifulalala-del/clink-chinese-enhanced
+   ```
 
-> 这个包使用语言代码 `zh_cn`，以避开 Clink 官方 `zh` 中文包。测试前建议记下当前官方中文包设置，必要时可随时切回官方仓库。
+2. GitHub Actions 运行 `Publish Clink Chinese Enhanced`，版本填 `v0.4.0`。
+3. Languages → Community，安装 `zh_cn`。
+4. 不要覆盖官方 `zh`。
 
-## 已知硬限制
+发布后 Clink 读的是 GitHub Release 里的 `manifest.json` 和 `zh_cn--zh_cn.*`。
 
-Clink 当前 `.cime` 本质仍是 reading→候选表。这个包用高频词和结构化短句扩大覆盖率，但它 **不能从语言包层面实现真正的动态拼音切分、Viterbi/beam search 整句解码、模糊音纠错**。这些需要 Clink App 本体支持。
+## 许可
 
-因此本社区实验版的目的很明确：
-
-1. 先让 `pinyin / nihaoma / woxiangchifan` 这类常用长拼音能工作；
-2. 验证 `.cngm` 下一词模型是否被中文键盘实际调用；
-3. 用测试结果判断下一步该继续扩词库，还是必须让开发者改 decoder。
-
-## 文件说明
-
-- `Lexicons/zh_cn.cime`：可读文本 IME 表。
-- `Lexicons/zh_cn.clex`：Clink CLEX v1 二进制词典。
-- `Lexicons/zh_cn.cngm`：Clink CNGM v1 下一词模型。
-- `Lexicons/zh_cn.emoji.json`：中文 Emoji aliases。
-- `source/zh_cn-ime.tsv`：可编辑 IME 源表。
-- `source/zh_cn.txt`：词典源词表。
-- `source/zh_cn.sentences.txt`：下一词模型的分词语料。
-- `.github/workflows/release.yml`：自动发布 Release。
-
-## 数据与许可
-
-本实验包没有直接复制搜狗、百度等商业输入法词库，也没有打包 Rime 的第三方词库。常用词/短语与模板为本项目整理；拼音在构建阶段由系统 ICU transliterator 生成。详细见 `LICENSE.txt`。
+- 本仓库整理脚本、短句和发布配置：CC0-1.0
+- 字词读音与词频：来自 [amzxyz/rime-wanxiang](https://github.com/amzxyz/rime-wanxiang)，[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- 构建脚本格式兼容 [anti-ltd/clink-language-packs](https://github.com/anti-ltd/clink-language-packs)

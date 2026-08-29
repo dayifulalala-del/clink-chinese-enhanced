@@ -5,10 +5,8 @@ import pathlib
 import shutil
 import sys
 
-
 LANGUAGE_CODE = "zh_cn"
 ASSET_SUFFIXES = (".cime", ".clex", ".cngm", ".emoji.json")
-
 
 if len(sys.argv) != 4:
     raise SystemExit("usage: build-release-manifest.py VERSION OWNER/REPO OUT")
@@ -19,8 +17,6 @@ lex = root / "Lexicons"
 output = pathlib.Path(out)
 assets = output / "assets"
 
-# The output directory is a release staging area. Recreate its asset directory
-# so rerunning the builder cannot leave stale assets from an older pack.
 if assets.exists():
     shutil.rmtree(assets)
 assets.mkdir(parents=True, exist_ok=True)

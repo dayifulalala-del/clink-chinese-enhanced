@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Release version, e.g. v0.3.0
+        description: Release version, e.g. v0.4.0
         required: true
   push:
     tags: ['v*']
@@ -14,8 +14,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate pack
-        run: python3 tools/validate-pack.py zh_cn
+      - name: Fetch Wanxiang dictionaries
+        run: |
+          git clone --depth 1 --branch wanxiang https://github.com/amzxyz/rime-wanxiang.git /tmp/wanxiang
+          curl -fsSL -o /tmp/zh.emoji.json https://raw.githubusercontent.com/anti-ltd/clink-language-packs/main/Lexicons/zh.emoji.json
+      - name: Build pack from Wanxiang + sources
+        run: |
+          python3 tools/import_wanxiang.py
+          python3 tools/build-ime-table.py zh_cn source/zh_cn-ime.tsv
+          python3 build-pack.py zh_cn source/zh_cn.txt
+          python3 tools/build-next-word.py zh_cn source/zh_cn.txt source/zh_cn.sentences.txt
+          python3 tools/validate-pack.py zh_cn
       - name: Build release manifest
         run: |
           V="${{ inputs.version || github.ref_name }}"

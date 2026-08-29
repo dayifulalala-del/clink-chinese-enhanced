@@ -1,6 +1,19 @@
-Clink Chinese Enhanced v0.1
+Clink Chinese Enhanced
 
-Project-authored vocabulary, phrase templates, source lists and generated Clink assets in this archive are released under CC0-1.0.
-Build scripts adapted from anti-ltd/clink-language-packs are provided for interoperability; consult the upstream repository for its current terms.
-ICU uconv was used as a build-time transliterator only; ICU data/code is not bundled in this archive.
-No proprietary commercial input-method dictionary is bundled.
+Community packaging, short phrases, build scripts and release metadata in this
+repository are dedicated to the public domain under CC0-1.0.
+
+Lexicon readings, candidate ranking and word frequencies are derived from
+万象拼音 (amzxyz/rime-wanxiang):
+
+    https://github.com/amzxyz/rime-wanxiang
+    https://creativecommons.org/licenses/by/4.0/
+
+This is adapted material. The original dictionaries are licensed under
+Creative Commons Attribution 4.0 International. Attribution to amzxyz /
+万象拼音 must be retained.
+
+Build helpers follow the file formats published by
+anti-ltd/clink-language-packs for interoperability.
+
+No commercial IME lexicon (Sogou, Baidu, etc.) is bundled.

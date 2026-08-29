@@ -1,13 +1,12 @@
 {
-  "gb2312_chars": 6763,
-  "core_words": 544,
-  "manual_phrases": 145,
-  "synthetic_phrases": 13358,
-  "ime_readings": 14216,
-  "clex_entries": 7388,
-  "cngm_pairs": 704,
-  "sentence_lines": 20478,
   "languageCode": "zh_cn",
-  "version": "v0.2.0",
-  "purpose": "Avoid collision with official zh package and test Clink community pack discovery."
+  "version": "v0.4.0",
+  "source": "amzxyz/rime-wanxiang (CC BY 4.0) + community phrases",
+  "ime_readings": 66838,
+  "clex_entries": 81972,
+  "sentence_lines": 3182,
+  "emoji_aliases": 1916,
+  "emoji_stopwords": 19,
+  "syllables": 418,
+  "purpose": "Wanxiang-weighted Pinyin table for Clink community pack zh_cn"
 }
